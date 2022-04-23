@@ -1,0 +1,3 @@
+create docker image of conda env created locally for distribution
+
+Can't use purely visual information for this task because it is ambiguous, for example, can't discern up or down velocity in breakout

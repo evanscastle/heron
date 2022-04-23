@@ -1,0 +1,12 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+.idea
+/__pycache__
+/data
+/output
+/test_data
+/configs/path_to_data.txt
+/.ipynb_checkpoints
+*.pyc

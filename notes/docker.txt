@@ -1,0 +1,17 @@
+#run container and mount local directories
+docker run -it --name openai -v C:\Users\evans\Desktop\Code\openai-atari:/home/jovyan/code/openai-atari 8473505dc661
+
+docker run -p <local port>:8888 -it -v <local directory to mount>:<target directory> jxu305/openai_gym_docker:v1.0
+docker exec -it {$CONTAINER_ID} bash
+
+docker run -p 8888:8888 -it --name openai -v C:\Users\evans\Desktop\Code\openai-atari:/home/jovyan/code/openai-atari 8473505dc661
+
+#####################################################################################
+docker run -p 8888:8888 -it --name heron -v C:\Users\evans\Desktop\Code\openai-atari:/home/jovyan/code/openai-atari jxu305/openai_gym_docker:v1.0
+docker exec -it heron bash
+docker exec -it -u 0 heron bash (login as root)
+
+docker >> conda install keras
+
+
+https://github.com/ageron/handson-ml2/blob/master/18_reinforcement_learning.ipynb
