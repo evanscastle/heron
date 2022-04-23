@@ -2,10 +2,19 @@
 # https://github.com/openai/baselines
 from baselines.common.atari_wrappers import make_atari, wrap_deepmind
 
+# For some reason the venv is not recognizing that these directories are already in PATH
+import os
+if os.name == 'nt':
+    os.add_dll_directory("C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/bin")
+    os.add_dll_directory("C:/tools/cuda/bin")
+    os.add_dll_directory('C:/tools/zlib/dll_x64')
+
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+
+from datetime import datetime
 
 # ----------------------------------------SETUP---------------------------------------------
 
@@ -85,7 +94,10 @@ update_target_network = 10000
 # Using huber loss for stability
 loss_function = keras.losses.Huber()
 
-while True:  # Run until solved
+dt_string = datetime.now().strftime("%d.%m.%Y_%H.%M.%S")
+
+print('')
+while True:  # Run until solved or episode limit
     state = np.array(env.reset())
     episode_reward = 0
 
@@ -200,6 +212,7 @@ while True:  # Run until solved
         print("Solved at episode {}!".format(episode_count))
         break
 
-    if episode_count == 2:
+    if episode_count == 500:
         break
 
+model.save(f'weights/{dt_string}_model_{episode_count}')

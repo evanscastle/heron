@@ -1,3 +1,7 @@
 create docker image of conda env created locally for distribution
 
 Can't use purely visual information for this task because it is ambiguous, for example, can't discern up or down velocity in breakout
+
+all instructions are relative to the top level directory
+
+incorporate observations from various trained agents to increase robustness of training samples
