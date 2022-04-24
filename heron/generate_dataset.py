@@ -17,9 +17,10 @@ show = False
 episode_count = 0
 
 sample_mode = 0
-batch_size = 5
+batch_size = 50
 num_processed_batches = 0
-num_batches = 2
+num_batches = 20
+save_format = 'pickle'
 
 # Prepare environment
 env = make_atari("BreakoutNoFrameskip-v4")
@@ -46,7 +47,7 @@ while num_processed_batches < num_batches:
         # Take best action
         action = tf.argmax(action_probs[0]).numpy()
 
-        state_next, reward, done, _ = env.step(action)
+        state_next, _, done, _ = env.step(action)
         state_next = np.array(state_next)
         
         if sample_transition(timestep, episode_count, sample_mode):
@@ -55,7 +56,7 @@ while num_processed_batches < num_batches:
 
         # batch data to prevent memory leaks and to organize data
         if len(batch) >= batch_size:
-            process_batch(path, batch, num_processed_batches)
+            process_batch(path, batch, num_processed_batches, num_batches, save_format)
             num_processed_batches += 1
             batch = []
 

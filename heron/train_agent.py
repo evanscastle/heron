@@ -211,8 +211,9 @@ while True:  # Run until solved or episode limit
     if running_reward > 40:  # Condition to consider the task solved
         print("Solved at episode {}!".format(episode_count))
         break
-
+    
+    # Checkpoint in case training is interrupted
     if episode_count == 500:
-        break
+        model.save(f'weights/{dt_string}_model_{episode_count}')
 
-model.save(f'weights/{dt_string}_model_{episode_count}')
+model.save(f'weights/{dt_string}_model')
