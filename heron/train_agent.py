@@ -56,14 +56,20 @@ def create_agent_model():
 
     return keras.Model(inputs=inputs, outputs=action)
 
+model_file = None
+if model_file is not None:
+    model = keras.models.load_model(model_file)
 
-# The first model makes the predictions for Q-values which are used to
-# make a action.
-model = create_agent_model()
-# Build a target model for the prediction of future rewards.
-# The weights of a target model get updated every 10000 steps thus when the
-# loss between the Q-values is calculated the target Q-value is stable.
-model_target = create_agent_model()
+    model_target = keras.models.load_model(model_file)
+
+else:
+    # The first model makes the predictions for Q-values which are used to
+    # make a action.
+    model = create_agent_model()
+    # Build a target model for the prediction of future rewards.
+    # The weights of a target model get updated every 10000 steps thus when the
+    # loss between the Q-values is calculated the target Q-value is stable.
+    model_target = create_agent_model()
 
 # ----------------------------------------TRAIN---------------------------------------------
 # In the Deepmind paper they use RMSProp however then Adam optimizer
@@ -98,6 +104,7 @@ parent_dir = 'agents'
 dt_string = datetime.now().strftime("%d.%m.%Y_%H.%M.%S")
 path = os.path.join(parent_dir, dt_string)
 os.mkdir(path)
+
 
 print('')
 while True:  # Run until solved or episode limit
