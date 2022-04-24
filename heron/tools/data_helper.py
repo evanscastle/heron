@@ -3,14 +3,17 @@ import os
 import pickle
 
 def load_transition(filename, load_format):
+    
     if load_format=='pickle':
         return pickle.load(open(filename, "rb" ))
-        
+
     else:
         return False, 'Load format not understood'
 
+
 # Write a transition to disk according to a specified save format
 def save_transition(filename, transition, save_format):
+    
     if save_format=='pickle':
         pickle.dump(transition, open(filename, "wb" ))
 
@@ -20,42 +23,65 @@ def save_transition(filename, transition, save_format):
 
 # Save all of the data in a batch to disk according to save_format param
 def process_batch(batch_dir, batch, num_processed_batches, save_format='pickle'):
-    path = os.path.join(batch_dir, str(num_processed_batches))
-    os.mkdir(path)
+    
+    # Create directory for the batch
+    path = os.path.join(batch_dir, 'batch_' + str(num_processed_batches))
+    if not os.path.exists(path):
+        os.mkdir(path)
 
     for i, transition in enumerate(batch):
-        name = f'{path}/{i}'
+        name = f'{path}/{i}.pkl'
         save_transition(name, transition, save_format)
+
+    output_msg = f'Batch of {len(batch)} transitions successfully saved at {path}'
+    print(output_msg)
 
 
 # A method to determine whether a particular transition will be included in the dataset
 def sample_transition(timestep, episode_count, sample_mode):
+    
+    # This sample mode is here for testing purposes; it samples every transition
     if sample_mode == 0:
-        if timestep % 10 == 0:
-            return True
-
-        else:
-            return False
+        return True
 
     else:
         assert False, 'Invalid sample mode'
 
 
 # Using state information, generate an image to be either displayed or returned
-def generate_frame(state, winname=None, scale=1, show_action=False, display=False, ret=False):
+def generate_state_img(state, winname=None, scale=1, display=False, ret=False):
+    
     width = int(state.shape[1] * scale)
     height = int(state.shape[0] * scale)
     dim = (width, height)
 
-    resized_state = cv2.resize(state, dim, interpolation = cv2.INTER_AREA)
+    img = cv2.resize(state, dim, interpolation = cv2.INTER_AREA)
     
     if display:
         if winname is None:
             winname = 'agent'
         cv2.namedWindow(winname) 
         cv2.moveWindow(winname, 40,30)
-        cv2.imshow(winname, resized_state)
-        cv2.waitKey(50)
+        cv2.imshow(winname, img)
+        cv2.waitKey(0)
 
     if ret:
-        return resized_state
+        return img
+
+# Create an image of the transition for visualization purposes. Uses same args as generate_state_img
+def generate_transition_img(transition, winname=None, scale=1, show_action=False, display=False, ret=False):
+    orig = generate_state_img(transition[0], winname=winname, scale=scale, ret=True)
+    new = generate_state_img(transition[1], winname=winname, scale=scale, ret=True)
+    
+    img = cv2.hconcat(orig, new)
+
+    if display:
+        if winname is None:
+            winname = f'action: {transition[2]}'
+        cv2.namedWindow(winname)
+        cv2.moveWindow(winname, 40,30)
+        cv2.imshow(winname, img)
+        cv2.waitKey(0)
+
+    if ret:
+        return img

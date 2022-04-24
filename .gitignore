@@ -7,5 +7,6 @@
 /.ipynb_checkpoints
 /venv
 /baselines
-/weights
+/models
+/datasets
 *.pyc
