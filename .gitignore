@@ -9,4 +9,7 @@
 /baselines
 /models
 /datasets
+/notes
+/agents
+/dynamics
 *.pyc

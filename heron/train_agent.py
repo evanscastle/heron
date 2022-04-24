@@ -40,7 +40,7 @@ env.seed(seed)
 
 num_actions = 4
 
-def create_q_model():
+def create_agent_model():
     # Network defined by the Deepmind paper
     inputs = layers.Input(shape=(84, 84, 4,))
 
@@ -59,11 +59,11 @@ def create_q_model():
 
 # The first model makes the predictions for Q-values which are used to
 # make a action.
-model = create_q_model()
+model = create_agent_model()
 # Build a target model for the prediction of future rewards.
 # The weights of a target model get updated every 10000 steps thus when the
 # loss between the Q-values is calculated the target Q-value is stable.
-model_target = create_q_model()
+model_target = create_agent_model()
 
 # ----------------------------------------TRAIN---------------------------------------------
 # In the Deepmind paper they use RMSProp however then Adam optimizer
@@ -94,15 +94,15 @@ update_target_network = 10000
 # Using huber loss for stability
 loss_function = keras.losses.Huber()
 
+parent_dir = 'agents'
 dt_string = datetime.now().strftime("%d.%m.%Y_%H.%M.%S")
+path = os.path.join(parent_dir, dt_string)
+os.mkdir(path)
 
 print('')
 while True:  # Run until solved or episode limit
     state = np.array(env.reset())
     episode_reward = 0
-
-    if episode_count % 100 == 0:
-        print(f'episodes elapsed: {episode_count}')
 
     for timestep in range(1, max_steps_per_episode):
         # env.render(); Adding this line would show the attempts
@@ -212,8 +212,11 @@ while True:  # Run until solved or episode limit
         print("Solved at episode {}!".format(episode_count))
         break
     
-    # Checkpoint in case training is interrupted
-    if episode_count == 500:
-        model.save(f'weights/{dt_string}_model_{episode_count}')
+    if episode_count % 50 == 0:
+        print(f'episodes elapsed: {episode_count}')
 
-model.save(f'weights/{dt_string}_model')
+    # Checkpoint in case training is interrupted
+    if episode_count % 500 == 0:
+        model.save(f'agents/{dt_string}/agent_ep={episode_count}_seed={seed}')
+
+model.save(f'agents/{dt_string}/agent_seed={seed}')
