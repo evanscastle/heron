@@ -32,7 +32,7 @@ max_steps_per_episode = 10000
 
 # Use the Baseline Atari environment because of Deepmind helper functions
 env = make_atari("BreakoutNoFrameskip-v4")
-# Warp the frames, grey scale, stake four frame and scale to smaller ratio
+# Warp the frames, grey scale, stack four frame and scale to smaller ratio
 env = wrap_deepmind(env, frame_stack=True, scale=True)
 env.seed(seed)
 
