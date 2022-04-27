@@ -9,7 +9,11 @@ from datetime import datetime
 import cv2
 import os
 
-from tools.data_helper import generate_state_img, process_batch, sample_transition
+import sys
+sys.path.append(os.path.join(os.getcwd(), 'tools'))
+from data_helper import process_batch, sample_transition
+from visualize import generate_state_img
+
 
 seed = 42
 max_steps_per_episode = 10000
@@ -27,7 +31,7 @@ env = make_atari("BreakoutNoFrameskip-v4")
 env = wrap_deepmind(env, frame_stack=True, scale=True)
 env.seed(seed)
 
-model = keras.models.load_model('models/23.04.2022_16.56.08_model_500')
+model = keras.models.load_model('agents/default')
 
 # Create directory for data
 parent_dir = 'datasets'

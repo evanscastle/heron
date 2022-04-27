@@ -58,9 +58,15 @@ def create_agent_model():
 
 model_file = None
 if model_file is not None:
+
     model = keras.models.load_model(model_file)
+    # model.load_weights(model_file)
 
     model_target = keras.models.load_model(model_file)
+    # model.summary()
+
+    print(f'model loaded from: {model_file}')
+
 
 else:
     # The first model makes the predictions for Q-values which are used to
@@ -87,7 +93,10 @@ running_reward = 0
 episode_count = 0
 frame_count = 0
 # Number of frames to take random action and observe output
-epsilon_random_frames = 50000
+if model_file is None:
+    epsilon_random_frames = 50000
+else:
+    epsilon_random_frames = 0
 # Number of frames for exploration
 epsilon_greedy_frames = 1000000.0
 # Maximum replay length
@@ -105,6 +114,7 @@ dt_string = datetime.now().strftime("%d.%m.%Y_%H.%M.%S")
 path = os.path.join(parent_dir, dt_string)
 os.mkdir(path)
 
+# TODO: Write a method for resuming training that deals with the various epsilon exploration issues
 
 print('')
 while True:  # Run until solved or episode limit
@@ -212,6 +222,7 @@ while True:  # Run until solved or episode limit
     if len(episode_reward_history) > 100:
         del episode_reward_history[:1]
     running_reward = np.mean(episode_reward_history)
+    print(running_reward)
 
     episode_count += 1
 

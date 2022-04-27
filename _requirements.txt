@@ -20,8 +20,4 @@ python -m atari_py.import_roms <path to folder>
 This should print out the names of ROMs as it imports them. The ROMs will be copied to your atari_py installation directory.
 
 
-conda install tensorflow
-conda install jupyter
-conda install keras
-pip install gym
 ipykernel (when running jupyter notebook in VS Code)
