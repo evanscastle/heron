@@ -16,6 +16,10 @@ def create_dynamics_model():
     # Network defined by the Deepmind paper
     encoder_input = layers.Input(shape=(84, 84, 4,))
 
+
+Could add the action as an image at the beginning so that the data will be seen by every pixel in the conv layer
+
+
     # Convolutions on the frames on the screen
     e1 = layers.Conv2D(32, 8, strides=4, activation="relu")(encoder_input)
     e2 = layers.Conv2D(64, 4, strides=2, activation="relu")(e1)
